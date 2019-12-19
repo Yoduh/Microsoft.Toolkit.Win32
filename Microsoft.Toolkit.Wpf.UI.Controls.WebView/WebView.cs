@@ -312,6 +312,11 @@ namespace Microsoft.Toolkit.Wpf.UI.Controls
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unviewable", Justification = "Unviewable is in WinRT type")]
         public event EventHandler<WebViewControlUnviewableContentIdentifiedEventArgs> UnviewableContentIdentified = (sender, args) => { };
 
+        /// <inheritdoc />
+        [StringResourceCategory(Constants.CategoryAction)]
+        [StringResourceDescription(Constants.DescriptionWebViewWebResourceRequested)]
+        public event EventHandler<WebViewControlWebResourceRequestedEventArgs> WebResourceRequested = (sender, args) => { };
+
         /// <summary>
         /// Gets a value indicating whether <see cref="WebView"/> is supported in this environment.
         /// </summary>
@@ -1134,6 +1139,11 @@ namespace Microsoft.Toolkit.Wpf.UI.Controls
             }
         }
 
+        private void OnWebResourceRequested(object sender, WebViewControlWebResourceRequestedEventArgs args)
+        {
+            WebResourceRequested?.Invoke(this, args);
+        }
+
         private void SubscribeEvents()
         {
             Verify.IsNotNull(_webViewControl);
@@ -1162,6 +1172,7 @@ namespace Microsoft.Toolkit.Wpf.UI.Controls
             _webViewControl.UnsafeContentWarningDisplaying += OnUnsafeContentWarningDisplaying;
             _webViewControl.UnsupportedUriSchemeIdentified += OnUnsupportedUriSchemeIdentified;
             _webViewControl.UnviewableContentIdentified += OnUnviewableContentIdentified;
+            _webViewControl.WebResourceRequested += OnWebResourceRequested;
         }
 
         private void UnsubscribeEvents()
@@ -1192,6 +1203,7 @@ namespace Microsoft.Toolkit.Wpf.UI.Controls
             _webViewControl.UnsafeContentWarningDisplaying -= OnUnsafeContentWarningDisplaying;
             _webViewControl.UnsupportedUriSchemeIdentified -= OnUnsupportedUriSchemeIdentified;
             _webViewControl.UnviewableContentIdentified -= OnUnviewableContentIdentified;
+            _webViewControl.WebResourceRequested -= OnWebResourceRequested;
         }
 
         private void UpdateBounds(double x, double y, double width, double height)
